@@ -7,7 +7,7 @@ from pywebio.session import *
 
 from models import Website, Crawler
 
-set_env(title='Краулер и парсер веб-ресурсов')
+set_env(title='Crawler')
 
 def main():
 
