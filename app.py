@@ -1,4 +1,4 @@
-import asyncio
+import argparse
 
 from pywebio import start_server
 from pywebio.input import *
@@ -7,7 +7,7 @@ from pywebio.output import *
 from models import Website, Crawler
 
 
-def app():
+def main():
 
     put_markdown(
         "# Краулер и парсер веб-ресурсов\nСервис предоставляет возможность обхода страниц разделов новостных веб-ресурсов с возможностью парсинга их содержимого.")
@@ -43,4 +43,8 @@ def print_results(results):
 
 
 if __name__ == '__main__':
-    start_server(app, debug=True, port=8080, websocket_ping_interval=30)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-p", "--port", type=int, default=8080)
+    args = parser.parse_args()
+
+    start_server(main, port=args.port, websocket_ping_interval=30))
