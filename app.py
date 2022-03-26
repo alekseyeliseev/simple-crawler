@@ -7,10 +7,10 @@ from pywebio.session import *
 
 from models import Website, Crawler
 
-set_env(title='Crawler')
-
 def main():
-
+    
+    set_env(title='Crawler')
+    
     put_markdown(
         "# Краулер и парсер веб-ресурсов\nСервис предоставляет возможность обхода страниц разделов новостных веб-ресурсов с возможностью парсинга их содержимого.")
 
