@@ -3,9 +3,11 @@ import argparse
 from pywebio import start_server
 from pywebio.input import *
 from pywebio.output import *
+from pywebio.session import *
 
 from models import Website, Crawler
 
+set_env(title='Краулер и парсер веб-ресурсов')
 
 def main():
 
