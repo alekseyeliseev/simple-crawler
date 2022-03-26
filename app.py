@@ -43,4 +43,4 @@ def print_results(results):
 
 
 if __name__ == '__main__':
-    start_server(app, debug=True, port=8080)
+    start_server(app, debug=True, port=8080, websocket_ping_interval=30)
