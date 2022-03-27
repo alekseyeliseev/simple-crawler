@@ -58,6 +58,7 @@ class Crawler:
         Получение страниц, начиная со стартовой
         """
         bs = self.getPage(self.site.url)
+        if bs is None: return self.results
         targetPages = bs.findAll('a', href=re.compile(self.site.targetPattern))
         for targetPage in targetPages:
             targetPage = targetPage.attrs['href']
