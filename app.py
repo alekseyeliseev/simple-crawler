@@ -13,11 +13,13 @@ def main():
     set_env(title='Краулер и парсер веб-ресурсов')
 
     tstu_logo = open('static/tstu_logo.png', 'rb').read()  
-    put_image(tstu_logo, height='100px')
+    style(put_image(tstu_logo, height='100px'), 'float:left')
 
-    isizi_logo = open('static/isizi_logo.png', 'rb').read()  
-    put_image(isizi_logo, height='150px')
-    
+    iait_logo = open('static/iait_logo.png', 'rb').read()  
+    style(put_image(iait_logo, height='100px'), 'float:right')
+
+    put_html('<div style="clear: left"></div>')
+
     put_markdown("# Программный комплекс «Краулер и парсер веб-ресурсов» (версия 0.1)")
     put_markdown("Программный комплекс **«Краулер и парсер веб-ресурсов» (версия 0.1)** предоставляет возможность автоматического обхода страниц заданных разделов интернет-ресурсов (например, новостных) с возможностью парсинга их содержимого по заранее определённому шаблону веб-страниц.") 
     put_markdown("Проект выполнен на кафедре «Информационные системы и защита информации» Тамбовского государственного технического университета.")
