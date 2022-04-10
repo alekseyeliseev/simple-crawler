@@ -7,6 +7,7 @@ from pywebio.output import *
 from pywebio.session import *
 
 from models import Website, Crawler
+from utils import preproc_line 
 
 def main():
     
@@ -20,8 +21,8 @@ def main():
 
     put_html('<div style="clear: left"></div>')
 
-    put_markdown("# Программный комплекс «Краулер и парсер веб-ресурсов» (версия 0.1)")
-    put_markdown("Программный комплекс **«Краулер и парсер веб-ресурсов» (версия 0.1)** предоставляет возможность автоматического обхода страниц заданных разделов интернет-ресурсов (например, новостных) с возможностью парсинга их содержимого по заранее определённому шаблону веб-страниц.") 
+    put_markdown("# Программный комплекс «Краулер и парсер веб-ресурсов» (версия 0.2)")
+    put_markdown("Программный комплекс **«Краулер и парсер веб-ресурсов» (версия 0.2)** предоставляет возможность автоматического обхода страниц заданных разделов интернет-ресурсов (например, новостных) с возможностью парсинга их содержимого по заранее определённому шаблону веб-страниц и фильтрации по ключевым словам.") 
     put_markdown("Проект выполнен на кафедре «Информационные системы и защита информации» Тамбовского государственного технического университета.")
     
     put_markdown("Для запуска процедуры поиска необходимо задать следующие параметры:")
@@ -62,19 +63,37 @@ def main():
         input('Правило выделения заголовка статьи',
               name='titleTag', type=TEXT, required=True, help_text='Пример: div.title'),
         input('Правило выделения текста статьи',
-              name='bodyTag', type=TEXT, required=True, help_text='Пример: div.content-blocks')
+              name='bodyTag', type=TEXT, required=True, help_text='Пример: div.content-blocks'),
+        input('Ключевые слова',
+              name='keywords', type=TEXT, help_text='Пример: война агрессия пропаганда')
     ])
 
     site = Website(info['name'], info['url'], info['targetPattern'],
                    False, info['titleTag'], info['bodyTag'])
-    crawl(site)
-
+    results = crawl(site)
+    filtered_results = filtering_results(results, info['keywords'])
+    print_results(filtered_results, )
 
 def crawl(site):
     crawler = Crawler(site)
     with put_loading(shape='border', color='primary').style('width:2rem; height:2rem'):
         results = crawler.crawl()
-    print_results(results)
+    return(results)
+    
+
+def filtering_results(results, keywords):
+    if keywords:
+        filtered_results = []
+        keywords_list = preproc_line(keywords)
+        for result in results:
+            count_keywords = 0
+            for keyword in keywords_list:
+                count_keywords += (keyword in result.body_processed)
+            if count_keywords:
+                filtered_results.append(result)
+        return(filtered_results)
+    else:
+        return(results)
 
 
 def print_results(results):
@@ -87,7 +106,7 @@ def print_results(results):
             put_markdown(f'[{result.url}]({result.url})')
             put_markdown(f'**{result.title}**')
             put_text(result.body).style('paddin-bottom: 10px')
-
+            #put_text(result.body_processed).style('paddin-bottom: 10px')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

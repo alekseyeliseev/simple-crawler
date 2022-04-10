@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import re
-
+from utils import preproc_line 
 
 class Website:
 
@@ -16,11 +16,11 @@ class Website:
 
 class Content:
 
-    def __init__(self, url, title, body):
+    def __init__(self, url, title, body, body_processed):
         self.url = url
         self.title = title
         self.body = body
-
+        self.body_processed = body_processed
 
 class Crawler:
     def __init__(self, site):
@@ -50,9 +50,10 @@ class Crawler:
             title = self.safeGet(bs, self.site.titleTag).rstrip() #убирает последний пробел в заголовке
             body = self.safeGet(bs, self.site.bodyTag)
             if title != '' and body != '':
-                content = Content(url, title, body)
+                body_processed = preproc_line(body) 
+                content = Content(url, title, body, body_processed)
                 self.results.append(content)
-
+    
     def crawl(self):
         """
         Получение страниц, начиная со стартовой
