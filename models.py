@@ -1,7 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 import re
-from utils import preproc_line 
+from utils import preproc_line
+
 
 class Website:
 
@@ -22,6 +23,7 @@ class Content:
         self.body = body
         self.body_processed = body_processed
 
+
 class Crawler:
     def __init__(self, site):
         self.site = site
@@ -37,29 +39,29 @@ class Crawler:
 
     def safeGet(self, pageObj, selector):
         selectedElems = pageObj.select(selector)
-        '''
+
         if selectedElems is not None and len(selectedElems) > 0:
-            return '\n'.join([elem.get_text() for elem in selectedElems])
+            return selectedElems[0].get_text()
         return ''
-        '''
-        return selectedElems[0].get_text()
 
     def parse(self, url):
         bs = self.getPage(url)
         if bs is not None:
-            title = self.safeGet(bs, self.site.titleTag).rstrip() #убирает последний пробел в заголовке
+            # убирает последний пробел в заголовке
+            title = self.safeGet(bs, self.site.titleTag).rstrip()
             body = self.safeGet(bs, self.site.bodyTag)
             if title != '' and body != '':
-                body_processed = preproc_line(body) 
+                body_processed = preproc_line(body)
                 content = Content(url, title, body, body_processed)
                 self.results.append(content)
-    
+
     def crawl(self):
         """
         Получение страниц, начиная со стартовой
         """
         bs = self.getPage(self.site.url)
-        if bs is None: return self.results
+        if bs is None:
+            return self.results
         targetPages = bs.findAll('a', href=re.compile(self.site.targetPattern))
         for targetPage in targetPages:
             targetPage = targetPage.attrs['href']
